@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import {isValidObjectId, Model} from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -141,9 +141,54 @@ export class UsersService {
   /**
    * Supprimer les informations sensibles de l'utilisateur
    */
-  private sanitizeUser(user: UserDocument): any {
-    const userObject = user.toObject();
-    const { password, __v, ...sanitizedUser } = userObject;
+
+  // rendre sanitizeUser publique pour controller Auth
+  sanitizeUser(user: UserDocument) {
+    const userObj = user.toObject();
+    const { password, __v, ...sanitizedUser } = userObj;
     return sanitizedUser;
   }
+
+  /**
+   * Mettre à jour un utilisateur par ID
+   */
+  async updateById(id: string, dto: any) {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('ID invalide');
+    }
+
+    const updated = await this.userModel.findByIdAndUpdate(
+        id,
+        dto,
+        { new: true }
+    );
+
+    if (!updated) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return {
+      message: 'Utilisateur mis à jour avec succès',
+      user: this.sanitizeUser(updated),
+    };
+  }
+
+
+  /**
+   * Supprimer un utilisateur par ID
+   */
+  async deleteById(id: string): Promise<any> {
+    const deleted = await this.userModel.findByIdAndDelete(id);
+    if (!deleted) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return {
+      message: 'Utilisateur supprimé avec succès',
+      user: this.sanitizeUser(deleted),
+    };
+  }
+
+
+
 }
