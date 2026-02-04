@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary-50: #eff6ff;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+  }
+}
+
+@layer utilities {
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+/* Accessibilité : focus styles */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+
+/* Skip to main content link - accessible mais caché par défaut */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary-700);
+  color: white;
+  padding: 8px;
+  z-index: 9999;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
