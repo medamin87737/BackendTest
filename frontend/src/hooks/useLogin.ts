@@ -33,7 +33,7 @@ export const useLogin = (): UseLoginResult => {
         setIsLoading(true);
         setError(null);
 
-        const { email, password, role } = data;
+        const { email, password } = data;
 
         const response = await fetch('/api/users/login', {
           method: 'POST',
@@ -55,8 +55,8 @@ export const useLogin = (): UseLoginResult => {
         }
 
         const backendRole = (json.user?.role as string | undefined)?.toLowerCase() as UserRoleId | undefined;
-        if (!backendRole || backendRole !== role) {
-          setError("Le rôle sélectionné ne correspond pas au rôle de ce compte.");
+        if (!backendRole) {
+          setError("Le rôle de l'utilisateur est manquant côté serveur.");
           return false;
         }
 

@@ -2,8 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { LoginFormData, UserRoleId } from '../types';
-import { RoleSelector } from './RoleSelector';
+import type { LoginFormData } from '../types';
 
 export interface LoginFormProps {
   onSubmit: (data: LoginFormData) => Promise<void> | void;
@@ -19,19 +18,16 @@ const loginSchema = z.object({
   password: z
     .string()
     .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-  role: z.enum(['hr', 'manager', 'employee'] as const),
   rememberMe: z.boolean(),
 });
 
 type LoginFormSchema = z.infer<typeof loginSchema>;
 
-// Formulaire de login avec validation en temps réel
+// Formulaire de login avec validation en temps réel (sans sélection de rôle)
 export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, disabled }) => {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormSchema>({
     resolver: zodResolver(loginSchema),
@@ -39,22 +35,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, disabled }) => {
     defaultValues: {
       email: '',
       password: '',
-      role: 'employee',
       rememberMe: true,
     },
   });
-
-  const currentRole = watch('role');
-
-  const handleRoleChange = (role: UserRoleId) => {
-    setValue('role', role, { shouldValidate: true, shouldDirty: true });
-  };
 
   const onValidSubmit = async (values: LoginFormSchema) => {
     const payload: LoginFormData = {
       email: values.email,
       password: values.password,
-      role: values.role,
       rememberMe: values.rememberMe,
     };
 
@@ -124,17 +112,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, disabled }) => {
             {errors.password.message}
           </p>
         )}
-      </div>
-
-      {/* Sélecteur de rôle */}
-      <div className="space-y-2">
-        <span className="block text-sm font-medium text-white">
-          Rôle dans l’organisation
-        </span>
-        <RoleSelector
-          value={currentRole}
-          onChange={handleRoleChange}
-        />
       </div>
 
       {/* Remember me + langue (i18n prêt) */}

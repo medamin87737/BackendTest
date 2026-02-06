@@ -14,7 +14,8 @@ export const RoleWelcomePage: React.FC = () => {
   const role = user?.role ?? 'employee';
 
   let title = 'Bienvenue';
-  if (role === 'hr') title = 'Bienvenue HR';
+  if (role === 'admin') title = 'Bienvenue Admin';
+  else if (role === 'hr') title = 'Bienvenue HR';
   else if (role === 'manager') title = 'Bienvenue Manager';
   else title = 'Bienvenue Employé';
 

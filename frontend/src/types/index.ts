@@ -1,7 +1,7 @@
 // Types centralisés utilisés dans tout le frontend.
 // Ce fichier est pensé pour du TypeScript strict.
 
-export type UserRoleId = 'hr' | 'manager' | 'employee';
+export type UserRoleId = 'admin' | 'hr' | 'manager' | 'employee';
 
 export interface UserRole {
   id: UserRoleId;
@@ -10,11 +10,10 @@ export interface UserRole {
   icon: string;
 }
 
-// Données du formulaire de login
+// Données du formulaire de login (rôle déterminé par le backend)
 export interface LoginFormData {
   email: string;
   password: string;
-  role: UserRoleId;
   rememberMe: boolean;
 }
 

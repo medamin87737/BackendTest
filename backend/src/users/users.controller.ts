@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   UseGuards,
   Patch,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -42,42 +43,44 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async login(@Body() loginUserDto: LoginUserDto) {
     const user = await this.authService.validateUser(loginUserDto.email, loginUserDto.password);
-    if (!user) throw new Error('Email ou mot de passe incorrect');
+    if (!user) {
+      throw new UnauthorizedException('Email ou mot de passe incorrect');
+    }
 
-    const token = await this.authService.login(user);
-    return { message: 'Connexion réussie', user: this.usersService.sanitizeUser(user), token };
+    const { access_token } = await this.authService.login(user);
+    return { message: 'Connexion réussie', user: this.usersService.sanitizeUser(user), token: access_token };
   }
 
-  /** Get all users - HR only */
+  /** Get all users - HR or ADMIN */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('HR')
+  @Roles('HR', 'ADMIN')
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
     return { success: true, message: 'Liste des utilisateurs', data: users, count: users.length };
   }
 
-  /** Get one user by ID - HR or MANAGER */
+  /** Get one user by ID - HR, MANAGER or ADMIN */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('HR', 'MANAGER')
+  @Roles('HR', 'MANAGER', 'ADMIN')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findById(id);
     return { success: true, message: 'Utilisateur récupéré', data: user };
   }
 
-  /** Update user by ID - HR only */
+  /** Update user by ID - HR or ADMIN */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('HR')
+  @Roles('HR', 'ADMIN')
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.updateById(id, updateUserDto);
   }
 
-  /** Delete user by ID - HR only */
+  /** Delete user by ID - HR or ADMIN */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('HR')
+  @Roles('HR', 'ADMIN')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.usersService.deleteById(id);

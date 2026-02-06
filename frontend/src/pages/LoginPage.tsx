@@ -6,6 +6,7 @@ import { LoginForm } from '../components/LoginForm';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { useLogin } from '../hooks/useLogin';
+import { useAuthStore } from '../store/authStore';
 import type { AccessibilitySettings, LoginFormData } from '../types';
 
 // Page principale de connexion au système de gestion RH intelligent
@@ -200,7 +201,12 @@ export const LoginPage: React.FC = () => {
               onSubmit={async (values: LoginFormData) => {
                 const ok = await login(values);
                 if (ok) {
-                  navigate('/home');
+                  const { user } = useAuthStore.getState();
+                  if (user?.role === 'admin') {
+                    navigate('/admin');
+                  } else {
+                    navigate('/home');
+                  }
                 }
               }}
               disabled={isLoading}
