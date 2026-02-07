@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedBackground } from '../components/AnimatedBackground';
@@ -38,10 +38,12 @@ export const RoleWelcomePage: React.FC = () => {
     navigate('/auth/login');
   };
 
-  // AJOUTER CETTE FONCTION :
-  const goToUploadCSV = () => {
-    navigate('/hr/upload-csv');
-  };
+  // Si un utilisateur HR arrive malgré tout sur /home, on le redirige vers le dashboard RH
+  useEffect(() => {
+    if (role === 'hr') {
+      navigate('/hr', { replace: true });
+    }
+  }, [role, navigate]);
 
   return (
     <div
@@ -93,20 +95,8 @@ export const RoleWelcomePage: React.FC = () => {
             </p>
           )}
 
-          {/* REMPLACER LE BOUTON PAR CE CODE : */}
           <div className="space-y-3">
-            {/* BOUTON POUR LES RH SEULEMENT */}
-            {role === 'hr' && (
-              <button
-                type="button"
-                onClick={goToUploadCSV}
-                className="w-full inline-flex items-center justify-center rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-900/40 transition-transform hover:-translate-y-0.5 hover:bg-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
-              >
-                Uploader CSV Employés
-              </button>
-            )}
-
-            {/* BOUTON DÉCONNEXION POUR TOUS */}
+            {/* BOUTON DÉCONNEXION POUR TOUS (les RH sont redirigés automatiquement vers /hr) */}
             <button
               type="button"
               onClick={handleLogout}

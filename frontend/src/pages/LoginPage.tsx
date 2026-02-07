@@ -204,6 +204,9 @@ export const LoginPage: React.FC = () => {
                   const { user } = useAuthStore.getState();
                   if (user?.role === 'admin') {
                     navigate('/admin');
+                  } else if (user?.role === 'hr') {
+                    // Les RH vont directement sur le dashboard RH
+                    navigate('/hr');
                   } else {
                     navigate('/home');
                   }

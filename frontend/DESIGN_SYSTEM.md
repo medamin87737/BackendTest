@@ -142,9 +142,6 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 - `src/widgets/` : widgets de dashboard réutilisables (`KpiGrid`, `RecommendationMeters`, etc.).
 - `src/store/` : état global (authentification, thème) via Zustand.
 - `tailwind.config.js` : palette, animations globales, `darkMode: 'class'`.
-- `DESIGN_SYSTEM.md` : document (ce fichier) décrivant le template visuel (pour ton rapport / ton enseignant).
 
 ---
-
-Ce design system décrit précisément **le template appliqué à ton projet** : tu peux le joindre à ton rapport ou le montrer à ton professeur comme référence officielle de ton UI (couleurs, boutons, cartes, structure, animations). 
 

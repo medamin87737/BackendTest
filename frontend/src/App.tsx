@@ -5,11 +5,11 @@ import { ThemeProvider } from './components/ThemeProvider';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import AdminLayout from './layout/AdminLayout';
 import AdminRoutes from './routes/AdminRoutes';
+import HRLayout from './layout/HRLayout';
+import HRRoutes from './routes/HRRoutes';
 
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RoleWelcomePage = React.lazy(() => import('./pages/RoleWelcomePage'));
-// AJOUTER CET IMPORT :
-const UploadCSVPage = React.lazy(() => import('./pages/HRDashboard'));
 
 function App() {
   return (
@@ -25,9 +25,18 @@ function App() {
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/home" element={<RoleWelcomePage />} />
-          
-          {/* AJOUTER CETTE ROUTE SIMPLE : */}
-          <Route path="/hr/upload-csv" element={<UploadCSVPage />} />
+
+          {/* Dashboard RH réservé au rôle HR */}
+          <Route
+            path="/hr/*"
+            element={
+              <ProtectedRoute allowedRoles={['hr']}>
+                <HRLayout>
+                  <HRRoutes />
+                </HRLayout>
+              </ProtectedRoute>
+            }
+          />
 
           {/* Admin dashboard réservé au rôle admin */}
           <Route
