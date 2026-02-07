@@ -8,6 +8,8 @@ import AdminRoutes from './routes/AdminRoutes';
 
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RoleWelcomePage = React.lazy(() => import('./pages/RoleWelcomePage'));
+// AJOUTER CET IMPORT :
+const UploadCSVPage = React.lazy(() => import('./pages/HRDashboard'));
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<LoginPage />} />
-          {/* Page simple dédiée par rôle (Bienvenue HR / Manager / Employé) */}
           <Route path="/home" element={<RoleWelcomePage />} />
+          
+          {/* AJOUTER CETTE ROUTE SIMPLE : */}
+          <Route path="/hr/upload-csv" element={<UploadCSVPage />} />
 
           {/* Admin dashboard réservé au rôle admin */}
           <Route

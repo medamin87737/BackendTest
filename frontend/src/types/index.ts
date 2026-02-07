@@ -34,3 +34,12 @@ export interface ThreeDObject {
   size: number;
   color: string;
 }
+
+// État de l'upload CSV
+export interface CSVUploadState {
+  file: File | null;
+  isUploading: boolean;
+  uploadProgress: number;
+  error: string | null;
+  successMessage: string | null;
+}
