@@ -207,6 +207,9 @@ export const LoginPage: React.FC = () => {
                   } else if (user?.role === 'hr') {
                     // Les RH vont directement sur le dashboard RH
                     navigate('/hr');
+                  } else if (user?.role === 'employee') {
+                    // Les employés vont directement sur le dashboard employé
+                    navigate('/employee');
                   } else {
                     navigate('/home');
                   }

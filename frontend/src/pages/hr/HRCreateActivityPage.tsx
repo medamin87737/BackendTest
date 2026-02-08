@@ -30,7 +30,7 @@ export const HRCreateActivityPage: React.FC = () => {
 
   const onSubmit = (data: CreateActivityFormValues) => {
     // À connecter à l'API (POST /api/hr/activities)
-    // eslint-disable-next-line no-console
+    // TODO: Implémenter l'appel API
     console.log('Nouvelle activité RH', data);
   };
 
