@@ -38,10 +38,14 @@ export const RoleWelcomePage: React.FC = () => {
     navigate('/auth/login');
   };
 
-  // Si un utilisateur HR arrive malgré tout sur /home, on le redirige vers le dashboard RH
+  // Redirection automatique selon le rôle
   useEffect(() => {
     if (role === 'hr') {
       navigate('/hr', { replace: true });
+    } else if (role === 'employee') {
+      navigate('/employee', { replace: true });
+    } else if (role === 'admin') {
+      navigate('/admin', { replace: true });
     }
   }, [role, navigate]);
 

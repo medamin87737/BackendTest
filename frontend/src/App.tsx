@@ -7,6 +7,9 @@ import AdminLayout from './layout/AdminLayout';
 import AdminRoutes from './routes/AdminRoutes';
 import HRLayout from './layout/HRLayout';
 import HRRoutes from './routes/HRRoutes';
+import EmployeeLayout from './layout/EmployeeLayout';
+import EmployeeRoutes from './routes/EmployeeRoutes';
+
 
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RoleWelcomePage = React.lazy(() => import('./pages/RoleWelcomePage'));
@@ -46,6 +49,17 @@ function App() {
                 <AdminLayout>
                   <AdminRoutes />
                 </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+           {/* Dashboard Employé réservé au rôle employee */}
+          <Route
+            path="/employee/*"
+            element={
+              <ProtectedRoute allowedRoles={['employee']}>
+                <EmployeeLayout>
+                  <EmployeeRoutes />
+                </EmployeeLayout>
               </ProtectedRoute>
             }
           />

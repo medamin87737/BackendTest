@@ -77,7 +77,7 @@ export const useLogin = (): UseLoginResult => {
         });
 
         return true;
-      } catch (e) {
+      } catch {
         setError(
           "Impossible de contacter le serveur. Vérifie que le backend tourne bien sur le port 3000 et que le proxy est configuré.",
         );

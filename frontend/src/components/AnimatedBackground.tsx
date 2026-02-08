@@ -63,13 +63,15 @@ const ParticleSystem: React.FC = () => {
   const count = 2000;
 
   // Pré-calcul des positions pour éviter de recréer le tableau à chaque rendu
-  const positions = React.useMemo(() => {
+  // Utilisation de useState avec initialisation lazy pour éviter l'erreur de pureté
+  const [positions] = React.useState(() => {
     const arr = new Float32Array(count * 3);
+    // Génération des positions aléatoires une seule fois à l'initialisation
     for (let i = 0; i < count * 3; i += 1) {
       arr[i] = (Math.random() - 0.5) * 100;
     }
     return arr;
-  }, [count]);
+  });
 
   useFrame((state) => {
     if (particlesRef.current) {
@@ -82,7 +84,6 @@ const ParticleSystem: React.FC = () => {
     <points ref={particlesRef}>
       <bufferGeometry>
         {/* Typage spécifique de react-three-fiber pour bufferAttribute */}
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <bufferAttribute
           attach="attributes-position"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
