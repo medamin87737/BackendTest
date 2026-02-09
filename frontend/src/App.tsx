@@ -1,15 +1,19 @@
-
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeProvider';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
+
 import AdminLayout from './layout/AdminLayout';
 import AdminRoutes from './routes/AdminRoutes';
+
 import HRLayout from './layout/HRLayout';
 import HRRoutes from './routes/HRRoutes';
+
 import EmployeeLayout from './layout/EmployeeLayout';
 import EmployeeRoutes from './routes/EmployeeRoutes';
 
+import ManagerLayout from './layout/ManagerLayout';
+import ManagerRoutes from './routes/ManagerRoutes';
 
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RoleWelcomePage = React.lazy(() => import('./pages/RoleWelcomePage'));
@@ -29,7 +33,7 @@ function App() {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/home" element={<RoleWelcomePage />} />
 
-          {/* Dashboard RH réservé au rôle HR */}
+          {/* Dashboard RH */}
           <Route
             path="/hr/*"
             element={
@@ -41,7 +45,7 @@ function App() {
             }
           />
 
-          {/* Admin dashboard réservé au rôle admin */}
+          {/* Dashboard Admin */}
           <Route
             path="/admin/*"
             element={
@@ -52,7 +56,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-           {/* Dashboard Employé réservé au rôle employee */}
+
+          {/* Dashboard Employé */}
           <Route
             path="/employee/*"
             element={
@@ -60,6 +65,18 @@ function App() {
                 <EmployeeLayout>
                   <EmployeeRoutes />
                 </EmployeeLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/*  Dashboard Manager */}
+          <Route
+            path="/manager/*"
+            element={
+              <ProtectedRoute allowedRoles={['manager']}>
+                <ManagerLayout>
+                  <ManagerRoutes />
+                </ManagerLayout>
               </ProtectedRoute>
             }
           />

@@ -39,15 +39,17 @@ export const RoleWelcomePage: React.FC = () => {
   };
 
   // Redirection automatique selon le rôle
-  useEffect(() => {
-    if (role === 'hr') {
-      navigate('/hr', { replace: true });
-    } else if (role === 'employee') {
-      navigate('/employee', { replace: true });
-    } else if (role === 'admin') {
-      navigate('/admin', { replace: true });
-    }
-  }, [role, navigate]);
+ useEffect(() => {
+  if (role === 'hr') {
+    navigate('/hr', { replace: true });
+  } else if (role === 'employee') {
+    navigate('/employee', { replace: true });
+  } else if (role === 'admin') {
+    navigate('/admin', { replace: true });
+  } else if (role === 'manager') {
+    navigate('/manager', { replace: true });
+  }
+}, [role, navigate]);
 
   return (
     <div

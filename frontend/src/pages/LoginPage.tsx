@@ -201,19 +201,21 @@ export const LoginPage: React.FC = () => {
               onSubmit={async (values: LoginFormData) => {
                 const ok = await login(values);
                 if (ok) {
-                  const { user } = useAuthStore.getState();
-                  if (user?.role === 'admin') {
-                    navigate('/admin');
-                  } else if (user?.role === 'hr') {
-                    // Les RH vont directement sur le dashboard RH
-                    navigate('/hr');
-                  } else if (user?.role === 'employee') {
-                    // Les employés vont directement sur le dashboard employé
-                    navigate('/employee');
-                  } else {
-                    navigate('/home');
-                  }
-                }
+  const { user } = useAuthStore.getState();
+
+  if (user?.role === 'admin') {
+    navigate('/admin');
+  } else if (user?.role === 'hr') {
+    navigate('/hr');
+  } else if (user?.role === 'employee') {
+    navigate('/employee');
+  } else if (user?.role === 'manager') {
+    navigate('/manager');
+  } else {
+    navigate('/home');
+  }
+}
+
               }}
               disabled={isLoading}
             />
