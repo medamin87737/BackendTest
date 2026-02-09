@@ -23,6 +23,7 @@ export interface AccessibilitySettings {
   fontSize: 'normal' | 'large' | 'xlarge';
   reduceMotion: boolean;
   screenReader: boolean;
+  voiceControl?: boolean;
 }
 
 // Paramètres pour les objets 3D de fond

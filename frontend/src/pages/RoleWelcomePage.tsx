@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
+import { SelectionReader } from '../components/SelectionReader';
 import { useAuthStore } from '../store/authStore';
 import type { AccessibilitySettings } from '../types';
 
@@ -24,6 +25,7 @@ export const RoleWelcomePage: React.FC = () => {
     fontSize: 'normal',
     reduceMotion: false,
     screenReader: false,
+    language: 'fr',
   });
 
   const fontSizeClass =
@@ -81,6 +83,7 @@ export const RoleWelcomePage: React.FC = () => {
 
       {/* Menu d'accessibilité */}
       <AccessibilityMenu settings={accessibility} onSettingsChange={setAccessibility} />
+      <SelectionReader enabled={accessibility.screenReader} />
 
       {/* Contenu principal simple */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">

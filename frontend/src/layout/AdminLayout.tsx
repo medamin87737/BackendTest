@@ -3,8 +3,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
-import { ThemeToggle } from '../components/ThemeToggle';
+import { BrandTitle } from '../components/BrandTitle';
+import { SelectionReader } from '../components/SelectionReader';
 import { useAuthStore } from '../store/authStore';
+import { useI18n } from '../i18n';
 import type { AccessibilitySettings } from '../types';
 
 interface AdminLayoutProps {
@@ -21,6 +23,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     screenReader: false,
   });
 
+  const { t } = useI18n();
+
   const fontSizeClass =
     accessibility.fontSize === 'large'
       ? 'text-[17px] md:text-[18px]'
@@ -36,7 +40,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           : 'bg-gradient-to-br from-primary-800 via-primary-900 to-gray-900'
       }`}
     >
-      {/* Fond vidéo + 3D commun au template */}
+      {/* Fond vidéo + 3D */}
       <video
         className="absolute inset-0 h-full w-full object-cover opacity-40"
         autoPlay
@@ -55,6 +59,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
       {/* Menu d'accessibilité (animations, contraste, taille police) */}
       <AccessibilityMenu settings={accessibility} onSettingsChange={setAccessibility} />
+      <SelectionReader enabled={accessibility.screenReader} />
 
       {/* Shell du dashboard admin */}
       <div className="relative z-10 min-h-screen flex bg-transparent text-slate-50">
@@ -63,21 +68,23 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
             <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-700 shadow-lg shadow-primary-900/40" />
             <div>
-              <p className="text-sm font-semibold tracking-wide">AI HR Admin</p>
-              <p className="text-[11px] text-slate-200">Supervision & Traceability</p>
+              <p className="text-sm font-semibold tracking-wide">
+                <BrandTitle variant="sidebar" />
+              </p>
+              <p className="text-[11px] text-slate-200">Admin Console</p>
             </div>
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-1 text-sm">
-            <SidebarLink to="/admin" label="Overview" />
-            <SidebarLink to="/admin/users" label="Users" />
-            <SidebarLink to="/admin/roles" label="Roles & Permissions" />
-            <SidebarLink to="/admin/employees" label="Employees" />
-            <SidebarLink to="/admin/activities" label="Activities" />
-            <SidebarLink to="/admin/audit" label="Audit Logs" />
-            <SidebarLink to="/admin/analytics" label="Analytics" />
-            <SidebarLink to="/admin/monitoring" label="Monitoring" />
-            <SidebarLink to="/admin/settings" label="Settings" />
+            <SidebarLink to="/admin" label={t('admin.sidebar.overview')} />
+            <SidebarLink to="/admin/users" label={t('admin.sidebar.users')} />
+            <SidebarLink to="/admin/roles" label={t('admin.sidebar.roles')} />
+            <SidebarLink to="/admin/employees" label={t('admin.sidebar.employees')} />
+            <SidebarLink to="/admin/activities" label={t('admin.sidebar.activities')} />
+            <SidebarLink to="/admin/audit" label={t('admin.sidebar.audit')} />
+            <SidebarLink to="/admin/analytics" label={t('admin.sidebar.analytics')} />
+            <SidebarLink to="/admin/monitoring" label={t('admin.sidebar.monitoring')} />
+            <SidebarLink to="/admin/settings" label={t('admin.sidebar.settings')} />
           </nav>
 
           {/* Bouton de déconnexion en bas de la sidebar */}
@@ -101,23 +108,13 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             <div className="flex items-center gap-2 lg:hidden">
               <span className="h-8 w-8 rounded-xl bg-gradient-to-br from-primary-400 to-primary-700" />
               <div>
-                <p className="text-sm font-semibold">AI HR Admin</p>
-                <p className="text-[11px] text-slate-200">Dashboard</p>
+                <p className="text-sm font-semibold">
+                  <BrandTitle variant="sidebar" />
+                </p>
+                <p className="text-[11px] text-slate-200">Admin</p>
               </div>
             </div>
-            <div className="flex-1 flex justify-end items-center gap-3">
-              <ThemeToggle />
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  navigate('/auth/login');
-                }}
-                className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-xs text-slate-100 hover:bg-slate-800 transition-colors"
-              >
-                Déconnexion
-              </button>
-            </div>
+            <div className="flex-1 flex justify-end items-center gap-3" />
           </header>
 
           <motion.main

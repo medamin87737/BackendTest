@@ -42,3 +42,165 @@
 .skip-to-content:focus {
   top: 0;
 }
+
+/* Thèmes additionnels via data-theme sur <html> */
+
+/* Mode "light" : fond plus clair mais toujours dans le thème bleu nuit */
+html[data-theme='light'] body {
+  background-color: #020617;
+  color: #e5e7eb;
+}
+
+html[data-theme='light'] .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, #1f2937, #0f172a);
+}
+
+html[data-theme='light'] .bg-slate-900\/70,
+html[data-theme='light'] .bg-slate-950\/70,
+html[data-theme='light'] .bg-slate-900\/90 {
+  background-color: rgba(15, 23, 42, 0.92);
+}
+
+/* Mode blanc (light très clair) : on garde la structure, mais on éclaircit fortement fonds et textes */
+html[data-theme='white'] body {
+  background-color: #f9fafb; /* gris très clair */
+  color: #111827; /* texte principal sombre */
+}
+
+html[data-theme='white'] .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
+}
+
+/* Surfaces principales (cartes / overlays) en mode blanc */
+html[data-theme='white'] .bg-black\/40 {
+  background-color: rgba(243, 244, 246, 0.88); /* overlay clair mais légèrement transparent pour laisser voir l'animation */
+}
+
+html[data-theme='white'] .bg-slate-900\/70,
+html[data-theme='white'] .bg-slate-950\/70,
+html[data-theme='white'] .bg-slate-900\/90 {
+  background-color: #ffffff; /* cartes blanches */
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Bordures plus claires en mode blanc */
+html[data-theme='white'] .border-slate-800\/80,
+html[data-theme='white'] .border-slate-700,
+html[data-theme='white'] .border-white\/20,
+html[data-theme='white'] .border-white\/30 {
+  border-color: #e5e7eb;
+}
+
+/* Texte plus foncé en mode blanc pour une meilleure lisibilité */
+html[data-theme='white'] .text-slate-50,
+html[data-theme='white'] .text-white {
+  color: #1e40af; /* titres bleus sombres */
+}
+
+html[data-theme='white'] .text-slate-100,
+html[data-theme='white'] .text-slate-200 {
+  color: #111827; /* texte principal noir/gris très foncé */
+}
+
+/* Textes gris clairs (ex: hero login, bullet points) -> noir en mode clair */
+html[data-theme='white'] .text-gray-100,
+html[data-theme='white'] .text-gray-200 {
+  color: #111827;
+}
+
+/* Texte secondaire en bleu sombre */
+html[data-theme='white'] .text-slate-300,
+html[data-theme='white'] .text-gray-400 {
+  color: #1e3a8a; /* bleu sombre */
+}
+
+/* Labels / légendes */
+html[data-theme='white'] .text-slate-400 {
+  color: #111827; /* labels noirs/foncés */
+}
+
+/* Liens par défaut en bleu sombre */
+html[data-theme='white'] a {
+  color: #1e3a8a;
+}
+
+html[data-theme='white'] a:hover {
+  color: #1d4ed8;
+}
+
+/* Boutons secondaires & surfaces translucides en mode blanc */
+html[data-theme='white'] .bg-white\/10 {
+  background-color: #f3f4f6;
+  color: #111827; /* texte bouton secondaire noir */
+}
+
+html[data-theme='white'] .hover\:bg-white\/20:hover {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+/* Inputs : fond blanc, bordure grise, texte foncé, placeholder gris moyen */
+html[data-theme='white'] .bg-white\/10.border,
+html[data-theme='white'] input.bg-white\/10,
+html[data-theme='white'] textarea.bg-white\/10 {
+  background-color: #ffffff;
+}
+
+html[data-theme='white'] input,
+html[data-theme='white'] textarea,
+html[data-theme='white'] select {
+  color: #111827;          /* texte noir */
+  border-color: #4b5563;   /* bordure gris foncé */
+}
+
+html[data-theme='white'] .placeholder\:text-gray-300::placeholder {
+  color: #9ca3af;          /* placeholder gris moyen */
+}
+
+/* Tableaux : head gris clair + texte foncé, lignes alternées et hover visible */
+html[data-theme='white'] .bg-slate-900\/90 {
+  background-color: #e5e7eb; /* header un peu plus foncé */
+}
+
+html[data-theme='white'] table thead th {
+  color: #1e3a8a; /* titres de colonnes en bleu sombre */
+}
+
+html[data-theme='white'] table tbody tr:nth-child(even) {
+  background-color: #f3f4f6; /* lignes alternées gris clair */
+}
+
+html[data-theme='white'] table {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* shadow légère */
+}
+
+html[data-theme='white'] .hover\:bg-slate-900\/60:hover,
+html[data-theme='white'] .hover\:bg-slate-900\/80:hover {
+  background-color: #e5e7eb; /* hover lignes */
+}
+
+/* Sidebar (nav) : lien normal en bleu sombre, lien actif en blanc */
+html[data-theme='white'] aside a {
+  color: #1e3a8a;
+}
+
+html[data-theme='white'] aside a.bg-slate-800\/80 {
+  color: #ffffff;
+}
+
+/* Tableaux : texte des cellules blanc par défaut, noir au survol de la ligne */
+html[data-theme='white'] table tbody td {
+  color: #ffffff;
+}
+
+html[data-theme='white'] table tbody tr:hover td {
+  color: #000000;
+}
+
+/* Cards en mode clair : fond blanc + shadow légère */
+html[data-theme='white'] .bg-slate-900\/70,
+html[data-theme='white'] .bg-slate-950\/70 {
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+

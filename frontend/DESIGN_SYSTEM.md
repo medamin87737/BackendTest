@@ -18,16 +18,35 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
   - **`primary-800` : `#1e40af` (fond dégradé)**  
   - `primary-900` : `#1e3a8a`
 
-- **Fond & surfaces (mode sombre)**  
-  - Background global : `#020617` → `#0b1120` (gradient)  
-  - Surface principale : `#020617` / `#0f172a`  
-  - Surface secondaire (cartes) : `rgba(15, 23, 42, 0.80)` (glassmorphism)  
-  - Bordures : `rgba(148, 163, 184, 0.4)` (`#94a3b8` à opacité réduite)
+#### Fond & surfaces (mode sombre – thème `dark`)  
+
+- Background global : `#020617` → `#0b1120` (gradient)  
+- Surface principale : `#020617` / `#0f172a`  
+- Surface secondaire (cartes) : `rgba(15, 23, 42, 0.80)` (glassmorphism)  
+- Bordures : `rgba(148, 163, 184, 0.4)` (`#94a3b8` à opacité réduite)
+
+#### Fond & surfaces (mode clair – thème `light`)  
+
+- Background global : `#f9fafb` (gris très clair)  
+- Surface principale : `#ffffff`  
+- Surface secondaire (cartes) : `#f3f4f6` avec ombre douce  
+- Bordures : `#e5e7eb`  
+- Texte principal : `#111827` (`text-gray-900`)  
+- Texte secondaire : `#4b5563` (`text-gray-600`)
+
+#### Fond & surfaces (mode blanc – thème `white`)  
+
+- Background global : `#f9fafb` avec overlay très léger pour laisser apparaître l’animation 3D  
+- Cartes : `#ffffff` (`bg-white`) avec shadow légère `rgba(15, 23, 42, 0.08)`  
+- Sidebar : `#f3f4f6` (`bg-gray-100` / `bg-gray-50`)  
+- Tableaux : head `#e5e7eb`, lignes alternées `#ffffff` / `#f3f4f6`, hover `#e5e7eb`, texte par défaut `#000000` et sur hover `#000000`
 
 - **Texte**  
-  - Titre / texte principal : `#e5e7eb`  
-  - Texte secondaire : `#9ca3af`  
-  - Texte désactivé : `#6b7280`
+  - Titre / texte principal (dark) : `#e5e7eb`  
+  - Texte secondaire (dark) : `#9ca3af`  
+  - Texte désactivé (dark) : `#6b7280`  
+  - Titre / texte principal (light/white) : `#111827`  
+  - Texte secondaire (light/white) : `#4b5563`
 
 - **État & feedback**  
   - Succès : `#22c55e`  
@@ -36,7 +55,38 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 ---
 
-### 2. Typographie
+### 2. Branding – Titre SkillUpTN
+
+Le titre **SkillUpTN** est animé et s’adapte au thème via le composant `BrandTitle`.
+
+- **Composant** : `src/components/BrandTitle.tsx`  
+- **Animation** :
+  - Gradient animé (background-position X) + légère rotation 3D (`rotateX`, `rotateY`) et petit `scale`.
+  - Durée : ~10s en boucle infinie (Framer Motion).
+
+#### Couleurs du gradient selon le thème
+
+- **Thème sombre (`dark`)** :  
+  - Gradient texte : `from-blue-400 via-blue-600 to-blue-800`  
+  - Ombre texte hero : `drop-shadow(0 0 16px rgba(30, 64, 175, 0.5))`  
+  - Ombre texte sidebar/chip : `drop-shadow(0 0 10px rgba(30, 64, 175, 0.45))`
+
+- **Thème clair (`light`)** :  
+  - Gradient texte : `from-white via-gray-400 to-blue-800` (donc lisible sur fond clair)  
+  - Ombre texte hero : `drop-shadow(0 0 22px rgba(30, 64, 175, 0.65))`  
+  - Ombre texte sidebar : `drop-shadow(0 0 14px rgba(30, 64, 175, 0.6))`
+
+- **Thème blanc (`white`)** :  
+  - Texte plein : `text-blue-800` (bleu sombre uniforme)  
+  - Ombre : `drop-shadow(0 0 12px rgba(30, 64, 175, 0.35))` (hero) / `0 0 8px rgba(30, 64, 175, 0.3)` (sidebar)
+
+Le composant est utilisé :
+- Sur la page de login (titre hero)
+- Dans la sidebar Admin et RH (titre de l’application)
+
+---
+
+### 3. Typographie
 
 - **Font principale** : `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`  
 - **Hiérarchie** :
@@ -48,7 +98,7 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 ---
 
-### 3. Rayons & effets (glassmorphism / néomorphisme)
+### 4. Rayons & effets (glassmorphism / néomorphisme)
 
 - **Rayons (border-radius)**
   - Cartes / panneaux : `16px` ou `24px`  
@@ -68,9 +118,9 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 ---
 
-### 4. Composants principaux
+### 5. Composants principaux
 
-#### 4.1. Bouton primaire
+#### 5.1. Bouton primaire
 
 - **Styles Tailwind** :  
   - `inline-flex items-center justify-center`  
@@ -83,11 +133,11 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 - **Usages** : CTA login, actions principales dans le dashboard.
 
-#### 4.2. Bouton secondaire
+#### 5.2. Bouton secondaire
 
 - Bordure `border border-slate-600`, fond `transparent`, texte `#e5e7eb`, hover : `bg-slate-800/60`.
 
-#### 4.3. Input texte (email / password)
+#### 5.3. Input texte (email / password)
 
 - **Styles Tailwind** :  
   - `w-full px-3 py-2`  
@@ -96,14 +146,14 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
   - `text-white placeholder:text-gray-300`  
   - `focus:outline-none focus:ring-2 focus:ring-primary-400`
 
-#### 4.4. Sélecteur de rôle (RoleSelector)
+#### 5.4. Sélecteur de rôle (RoleSelector)
 
 - Boutons pill dans une grille :  
   - `rounded-xl border px-3 py-2 text-left text-xs sm:text-sm`  
   - Actif : `bg-primary-600/90 text-white border-primary-300 shadow-lg`  
   - Inactif : `bg-black/20 text-gray-100 border-white/20 hover:border-primary-300`.
 
-#### 4.5. Cartes KPI (Dashboard)
+#### 5.5. Cartes KPI (Dashboard)
 
 - **Container** :  
   - `rounded-2xl border border-slate-800/80`  
@@ -115,7 +165,7 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
   - Valeur : 24–28 px, `font-semibold`, `text-slate-50`
   - Sous-texte : 12 px, `text-emerald-400` (tendance positive)
 
-#### 4.6. Tableau employés (HR)
+#### 5.6. Tableau employés (HR)
 
 - Table container : `rounded-2xl border border-slate-800/80 bg-slate-950/70 backdrop-blur-xl overflow-x-auto`
 - Head : fond `bg-slate-900/90`, texte `text-slate-300`
@@ -123,7 +173,22 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 ---
 
-### 5. Animations & micro-interactions
+### 6. Thèmes & accessibilité visuelle
+
+- **Thèmes supportés** : `dark`, `light`, `white` (pilotés par `useAuthStore().theme` et l’attribut `data-theme` sur `<html>`).  
+- Le thème impacte :
+  - Les fonds (`background`), couleurs des cartes et des sidebars.
+  - Les couleurs de texte (noir / gris foncé en clair, blanc / gris en sombre).
+  - Les tableaux (fond, hover, alternance de lignes).
+  - Le titre animé **SkillUpTN** (voir section 2).
+
+- **Overrides CSS** spécifiques aux thèmes : `src/index.css`  
+  - `html[data-theme='light'] { ... }` : définit contrastes adaptés pour le mode clair.  
+  - `html[data-theme='white'] { ... }` : accentue le contraste sur fond très clair et rend visible l’animation 3D.
+
+---
+
+### 7. Animations & micro-interactions
 
 - **Framer Motion** :
   - Entrée de page : `initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} duration=0.4`
@@ -135,7 +200,7 @@ Ce fichier documente le **template UI** utilisé dans ton projet (couleurs, typo
 
 ---
 
-### 6. Organisation du projet (template UI)
+### 8. Organisation du projet (template UI)
 
 - `src/pages/` : pages principales (`LoginPage`, `DashboardPage` + sous-pages dans `pages/dashboard`).
 - `src/components/` : composants transverses (`AnimatedBackground`, `LoginForm`, `RoleSelector`, `AccessibilityMenu`, `ThemeToggle`, `LoadingSpinner`).

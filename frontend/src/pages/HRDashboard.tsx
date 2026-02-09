@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
+import { SelectionReader } from '../components/SelectionReader';
 import { UploadEmployeesCSV } from '../components/UploadEmployeesCSV';
 import { useAuthStore } from '../store/authStore';
 import type { AccessibilitySettings } from '../types';
@@ -19,6 +20,7 @@ export const UploadCSVPage: React.FC = () => {
     fontSize: 'normal',
     reduceMotion: false,
     screenReader: false,
+    language: 'fr',
   });
 
   const fontSizeClass =
@@ -64,6 +66,7 @@ export const UploadCSVPage: React.FC = () => {
 
       {/* Menu d'accessibilité */}
       <AccessibilityMenu settings={accessibility} onSettingsChange={setAccessibility} />
+      <SelectionReader enabled={accessibility.screenReader} />
 
       {/* Header simple */}
       <header className="relative z-10 p-4">

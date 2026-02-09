@@ -3,8 +3,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
-import { ThemeToggle } from '../components/ThemeToggle';
+import { BrandTitle } from '../components/BrandTitle';
+import { SelectionReader } from '../components/SelectionReader';
 import { useAuthStore } from '../store/authStore';
+import { useI18n } from '../i18n';
 import type { AccessibilitySettings } from '../types';
 
 interface HRLayoutProps {
@@ -21,6 +23,8 @@ export const HRLayout: React.FC<HRLayoutProps> = ({ children }) => {
     screenReader: false,
   });
 
+  const { t } = useI18n();
+
   const fontSizeClass =
     accessibility.fontSize === 'large'
       ? 'text-[17px] md:text-[18px]'
@@ -36,7 +40,7 @@ export const HRLayout: React.FC<HRLayoutProps> = ({ children }) => {
           : 'bg-gradient-to-br from-primary-800 via-primary-900 to-gray-900'
       }`}
     >
-      {/* Fond vidéo + 3D commun au template */}
+      {/* Fond vidéo + 3D */}
       <video
         className="absolute inset-0 h-full w-full object-cover opacity-40"
         autoPlay
@@ -55,6 +59,7 @@ export const HRLayout: React.FC<HRLayoutProps> = ({ children }) => {
 
       {/* Menu d'accessibilité (animations, contraste, taille police) */}
       <AccessibilityMenu settings={accessibility} onSettingsChange={setAccessibility} />
+      <SelectionReader enabled={accessibility.screenReader} />
 
       {/* Shell du dashboard HR */}
       <div className="relative z-10 min-h-screen flex bg-transparent text-slate-50">
@@ -63,23 +68,25 @@ export const HRLayout: React.FC<HRLayoutProps> = ({ children }) => {
           <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
             <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-700 shadow-lg shadow-primary-900/40" />
             <div>
-              <p className="text-sm font-semibold tracking-wide">AI HR Dashboard</p>
-              <p className="text-[11px] text-slate-200">Talent Intelligence</p>
+              <p className="text-sm font-semibold tracking-wide">
+                <BrandTitle variant="sidebar" />
+              </p>
+              <p className="text-[11px] text-slate-200">HR Dashboard</p>
             </div>
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-1 text-sm">
-            <SidebarLink to="/hr" label="Dashboard RH" />
-            <SidebarLink to="/hr/employees" label="Gestion des employés" />
-            <SidebarLink to="/hr/employees/upload-csv" label="Upload CSV employés" />
-            <SidebarLink to="/hr/skills" label="Gestion des compétences" />
-            <SidebarLink to="/hr/activities" label="Gestion des activités" />
-            <SidebarLink to="/hr/activities/new" label="Lancer une activité" />
-            <SidebarLink to="/hr/activities/requests" label="Demandes d'activités" />
-            <SidebarLink to="/hr/notifications" label="Notifications" />
-            <SidebarLink to="/hr/statistics" label="Statistiques & graphiques" />
-            <SidebarLink to="/hr/history" label="Historique & traçabilité" />
-            <SidebarLink to="/hr/settings" label="Paramètres RH" />
+            <SidebarLink to="/hr" label={t('hr.sidebar.dashboard')} />
+            <SidebarLink to="/hr/employees" label={t('hr.sidebar.employees')} />
+            <SidebarLink to="/hr/employees/upload-csv" label={t('hr.sidebar.upload')} />
+            <SidebarLink to="/hr/skills" label={t('hr.sidebar.skills')} />
+            <SidebarLink to="/hr/activities" label={t('hr.sidebar.activities')} />
+            <SidebarLink to="/hr/activities/new" label={t('hr.sidebar.newActivity')} />
+            <SidebarLink to="/hr/activities/requests" label={t('hr.sidebar.requests')} />
+            <SidebarLink to="/hr/notifications" label={t('hr.sidebar.notifications')} />
+            <SidebarLink to="/hr/statistics" label={t('hr.sidebar.statistics')} />
+            <SidebarLink to="/hr/history" label={t('hr.sidebar.history')} />
+            <SidebarLink to="/hr/settings" label={t('hr.sidebar.settings')} />
           </nav>
 
           {/* Bouton de déconnexion en bas de la sidebar */}
@@ -103,23 +110,13 @@ export const HRLayout: React.FC<HRLayoutProps> = ({ children }) => {
             <div className="flex items-center gap-2 lg:hidden">
               <span className="h-8 w-8 rounded-xl bg-gradient-to-br from-primary-400 to-primary-700" />
               <div>
-                <p className="text-sm font-semibold">AI HR Dashboard</p>
+                <p className="text-sm font-semibold">
+                  <BrandTitle variant="sidebar" />
+                </p>
                 <p className="text-[11px] text-slate-200">Ressources Humaines</p>
               </div>
             </div>
-            <div className="flex-1 flex justify-end items-center gap-3">
-              <ThemeToggle />
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  navigate('/auth/login');
-                }}
-                className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-xs text-slate-100 hover:bg-slate-800 transition-colors"
-              >
-                Déconnexion
-              </button>
-            </div>
+            <div className="flex-1 flex justify-end items-center gap-3" />
           </header>
 
           <motion.main

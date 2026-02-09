@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { BrandTitle } from '../components/BrandTitle';
 import { LoginForm } from '../components/LoginForm';
+import { SelectionReader } from '../components/SelectionReader';
+import { VoiceLoginCommands } from '../components/VoiceLoginCommands';
 import { AccessibilityMenu } from '../components/AccessibilityMenu';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { useLogin } from '../hooks/useLogin';
 import { useAuthStore } from '../store/authStore';
 import type { AccessibilitySettings, LoginFormData } from '../types';
+import { useI18n } from '../i18n';
 
 // Page principale de connexion au système de gestion RH intelligent
 export const LoginPage: React.FC = () => {
@@ -19,6 +23,8 @@ export const LoginPage: React.FC = () => {
     reduceMotion: false,
     screenReader: false,
   });
+
+  const { t } = useI18n();
 
   const fontSizeClass =
     accessibility.fontSize === 'large'
@@ -65,11 +71,16 @@ export const LoginPage: React.FC = () => {
         <source src="/media/hr-intelligence-bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Arrière-plan 3D (désactivable pour réduire les animations) */}
+      {/* Arrière-plan 3D */}
       {!accessibility.reduceMotion && <AnimatedBackground />}
 
       {/* Overlay pour lisibilité */}
       <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+
+      {/* Lecteur d'accessibilité : lit le texte sélectionné quand screenReader est activé */}
+      <SelectionReader enabled={accessibility.screenReader} />
+      {/* Commandes vocales : remplissage email/mot de passe + connexion */}
+      <VoiceLoginCommands enabled={!!accessibility.voiceControl} />
 
       {/* Menu d'accessibilité (contraste, taille de police, etc.) */}
       <AccessibilityMenu
@@ -82,7 +93,7 @@ export const LoginPage: React.FC = () => {
         <div className="inline-flex items-center gap-2 rounded-full bg-black/30 px-3 py-1 backdrop-blur border border-white/10">
           <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
           <span className="text-xs uppercase tracking-wide text-gray-200">
-            HR Intelligence Suite
+            SkillUpTN
           </span>
         </div>
       </header>
@@ -102,13 +113,10 @@ export const LoginPage: React.FC = () => {
         >
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
             <motion.h1
-              className={`text-4xl lg:text-6xl font-bold mb-4 ${
-                accessibility.highContrast ? 'text-white' : 'text-white'
-              }`}
+              className="text-4xl lg:text-6xl font-bold mb-4"
               variants={containerVariants}
             >
-              <span className="block">HR Intelligence</span>
-              <span className="block text-primary-300">Platform</span>
+              <BrandTitle variant="hero" />
             </motion.h1>
 
             <motion.p
@@ -117,8 +125,7 @@ export const LoginPage: React.FC = () => {
               }`}
               variants={containerVariants}
             >
-              Système de gestion des ressources humaines intelligent, sécurisé et piloté
-              par la donnée.
+              {t('login.hero.subtitle')}
             </motion.p>
 
             <motion.ul className="space-y-4" variants={containerVariants}>
@@ -129,7 +136,7 @@ export const LoginPage: React.FC = () => {
                     accessibility.highContrast ? 'text-white' : 'text-gray-100'
                   }
                 >
-                  Analytics avancés en temps réel
+                  {t('login.hero.bullet1')}
                 </span>
               </li>
               <li className="flex items-center space-x-3">
@@ -139,7 +146,7 @@ export const LoginPage: React.FC = () => {
                     accessibility.highContrast ? 'text-white' : 'text-gray-100'
                   }
                 >
-                  Gestion optimisée des talents
+                  {t('login.hero.bullet2')}
                 </span>
               </li>
               <li className="flex items-center space-x-3">
@@ -149,7 +156,7 @@ export const LoginPage: React.FC = () => {
                     accessibility.highContrast ? 'text-white' : 'text-gray-100'
                   }
                 >
-                  Rapports personnalisés et automatisés
+                  {t('login.hero.bullet3')}
                 </span>
               </li>
             </motion.ul>
@@ -161,11 +168,11 @@ export const LoginPage: React.FC = () => {
           initial={{ opacity: 0, x: 40, scale: 0.97 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="lg:w-1/2 max-w-md w-full"
+          className="lg:w-1/2 max-w-lg w-full"
           aria-label="Formulaire de connexion"
         >
           <div
-            className={`backdrop-blur-xl rounded-2xl shadow-2xl p-6 sm:p-8 transform-gpu ${
+            className={`backdrop-blur-xl rounded-3xl shadow-2xl px-8 py-10 sm:px-9 sm:py-12 transform-gpu ${
               accessibility.highContrast
                 ? 'bg-gray-800 border-2 border-white'
                 : 'bg-white/10 border border-white/20'
@@ -177,14 +184,14 @@ export const LoginPage: React.FC = () => {
                   accessibility.highContrast ? 'text-white' : 'text-white'
                 }`}
               >
-                Connexion
+                {t('login.form.title')}
               </h2>
               <p
                 className={
                   accessibility.highContrast ? 'text-gray-300' : 'text-gray-200'
                 }
               >
-                Accédez à votre espace RH, manager ou employé.
+                {t('login.form.subtitle')}
               </p>
             </div>
 
@@ -220,35 +227,6 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading}
             />
 
-            {/* Liens supplémentaires */}
-            <div className="mt-6 text-center space-y-4">
-              <a
-                href="#forgot-password"
-                className={`block text-sm hover:text-primary-300 transition-colors ${
-                  accessibility.highContrast ? 'text-white' : 'text-gray-300'
-                }`}
-                aria-label="Réinitialiser votre mot de passe"
-              >
-                Mot de passe oublié ?
-              </a>
-              <div className="border-t border-white/20 pt-4">
-                <p
-                  className={`text-sm ${
-                    accessibility.highContrast ? 'text-gray-300' : 'text-gray-300'
-                  }`}
-                >
-                  Nouveau dans l&apos;entreprise ?{' '}
-                  <a
-                    href="#register"
-                    className="font-semibold text-primary-300 hover:text-primary-200 transition-colors"
-                    aria-label="Créer un nouveau compte"
-                  >
-                    Créer un compte
-                  </a>
-                </p>
-              </div>
-            </div>
-
             {/* Chargement */}
             {isLoading && (
               <div className="mt-6">
@@ -257,16 +235,6 @@ export const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Note d'accessibilité */}
-          <div className="mt-6 text-center">
-            <p
-              className={`text-xs ${
-                accessibility.highContrast ? 'text-gray-400' : 'text-gray-400'
-              }`}
-            >
-              Ce site vise la conformité aux standards WCAG 2.1 AA.
-            </p>
-          </div>
         </motion.section>
       </div>
     </div>

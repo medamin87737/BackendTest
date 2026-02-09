@@ -10,16 +10,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const setTheme = useAuthStore((s) => s.setTheme);
 
   useEffect(() => {
-    // Initialisation depuis localStorage si présent
+    // Initialisation depuis localStorage si présent (une seule fois)
     if (typeof window !== 'undefined') {
       const stored = window.localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark') {
+      if (stored === 'light' || stored === 'dark' || stored === 'white') {
         setTheme(stored);
-        return;
       }
     }
-    setTheme(theme);
-  }, [setTheme, theme]);
+    // On ne met pas `theme` en dépendance pour éviter une boucle infinie :
+    // on ne veut lire localStorage qu'une seule fois à l'initialisation.
+  }, [setTheme]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

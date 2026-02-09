@@ -397,7 +397,3 @@ Pour passer de la maquette fonctionnelle à un **dashboard RH connecté à ton b
    - Faire respecter les rôles backend (`@Roles('HR', 'ADMIN')`).
 4. **Temps réel / notifications** :
    - Brancher `HRNotificationsPage` sur un flux temps réel (WebSocket / SSE).
-
-Ce README sert de **guide complet** pour expliquer ton travail RH à ton enseignant  
-et pour que tu puisses facilement continuer à développer la partie backend associée.
-

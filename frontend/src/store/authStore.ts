@@ -9,11 +9,16 @@ export interface AuthUser {
   lastName?: string;
 }
 
+type ThemeId = 'light' | 'dark' | 'white';
+type LanguageId = 'fr' | 'en';
+
 interface AuthState {
   user: AuthUser | null;
   token: string | null;
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
+  theme: ThemeId;
+  language: LanguageId;
+  setTheme: (theme: ThemeId) => void;
+  setLanguage: (language: LanguageId) => void;
   loginSuccess: (payload: { user: AuthUser; token: string }) => void;
   logout: () => void;
 }
@@ -22,12 +27,21 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
   theme: 'dark',
+  language: 'fr',
   setTheme: (theme) =>
     set(() => {
       if (typeof document !== 'undefined') {
         document.documentElement.classList.toggle('dark', theme === 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
       }
       return { theme };
+    }),
+  setLanguage: (language) =>
+    set(() => {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('language', language);
+      }
+      return { language };
     }),
   loginSuccess: ({ user, token }) => {
     if (typeof window !== 'undefined') {
