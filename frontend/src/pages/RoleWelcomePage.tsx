@@ -25,7 +25,7 @@ export const RoleWelcomePage: React.FC = () => {
     fontSize: 'normal',
     reduceMotion: false,
     screenReader: false,
-    language: 'fr',
+    //language: 'fr',
   });
 
   const fontSizeClass =

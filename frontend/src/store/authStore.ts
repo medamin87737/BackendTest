@@ -7,6 +7,11 @@ export interface AuthUser {
   role: UserRoleId;
   firstName?: string;
   lastName?: string;
+  department?: string;
+  phoneNumber?: string;
+  profilePicture?: string;
+  isActive?: boolean;
+  lastLogin?: Date;
 }
 
 type ThemeId = 'light' | 'dark' | 'white';
@@ -21,6 +26,7 @@ interface AuthState {
   setLanguage: (language: LanguageId) => void;
   loginSuccess: (payload: { user: AuthUser; token: string }) => void;
   logout: () => void;
+  updateUser: (user: Partial<AuthUser>) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -57,5 +63,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
     set({ user: null, token: null });
   },
+  updateUser: (updatedFields) =>
+    set((state) => {
+      if (!state.user) return state;
+      const updatedUser = { ...state.user, ...updatedFields };
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+      }
+      return { user: updatedUser };
+    }),
 }));
-

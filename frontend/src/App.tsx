@@ -17,6 +17,7 @@ import ManagerRoutes from './routes/ManagerRoutes';
 
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RoleWelcomePage = React.lazy(() => import('./pages/RoleWelcomePage'));
+const ProfilePage = React.lazy(() => import('./pages/profile/ProfilePage'));
 
 function App() {
   return (
@@ -32,6 +33,16 @@ function App() {
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/home" element={<RoleWelcomePage />} />
+
+          {/* Shared Profile Route */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute allowedRoles={['hr', 'admin', 'employee', 'manager']}>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Dashboard RH */}
           <Route

@@ -60,9 +60,9 @@ export class UsersController {
     return { success: true, message: 'Liste des utilisateurs', data: users, count: users.length };
   }
 
-  /** Get one user by ID - HR, MANAGER or ADMIN */
+  /** Get one user by ID - HR, MANAGER, EMPLOYEE or ADMIN */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('HR', 'MANAGER', 'ADMIN')
+  @Roles('HR', 'MANAGER', 'EMPLOYEE', 'ADMIN')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findById(id);
