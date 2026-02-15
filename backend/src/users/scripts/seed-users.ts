@@ -4,7 +4,7 @@ import { UsersService } from '../users.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Department, DepartmentDocument } from '../schemas/department.schema';
-import { UserStatus } from '../schemas/user.schema';
+import { UserRole, UserStatus } from '../schemas/user.schema';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -51,6 +51,7 @@ async function bootstrap() {
         date_embauche: '2020-01-15',
         department_id: createdDepartments[1]._id.toString(), // RH
         status: UserStatus.ACTIVE,
+        role: UserRole.ADMIN,
       },
       {
         name: 'Sarah Ben Ali',
@@ -61,6 +62,7 @@ async function bootstrap() {
         date_embauche: '2021-03-20',
         department_id: createdDepartments[1]._id.toString(), // RH
         status: UserStatus.ACTIVE,
+        role: UserRole.HR,
       },
       {
         name: 'Mohamed Trabelsi',
@@ -71,6 +73,7 @@ async function bootstrap() {
         date_embauche: '2022-05-10',
         department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
+        role: UserRole.MANAGER,
       },
       {
         name: 'Ahmed Ben Salah',
@@ -81,6 +84,7 @@ async function bootstrap() {
         date_embauche: '2023-06-01',
         department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
+        role: UserRole.EMPLOYEE,
       },
       {
         name: 'Fatma Khelifi',
@@ -91,6 +95,7 @@ async function bootstrap() {
         date_embauche: '2023-07-15',
         department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
+        role: UserRole.EMPLOYEE,
       },
       {
         name: 'Youssef Mezghani',
@@ -101,6 +106,7 @@ async function bootstrap() {
         date_embauche: '2023-08-20',
         department_id: createdDepartments[2]._id.toString(), // Finance
         status: UserStatus.ACTIVE,
+        role: UserRole.EMPLOYEE,
       },
     ];
 

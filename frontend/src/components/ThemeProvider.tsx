@@ -13,8 +13,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     // Initialisation depuis localStorage si présent (une seule fois)
     if (typeof window !== 'undefined') {
       const stored = window.localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark' || stored === 'white') {
+      if (stored === 'light' || stored === 'white') {
         setTheme(stored);
+      } else if (stored === 'dark') {
+        // Ancien thème dark : on bascule automatiquement sur light
+        setTheme('light');
       }
     }
     // On ne met pas `theme` en dépendance pour éviter une boucle infinie :

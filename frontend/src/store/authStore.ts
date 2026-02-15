@@ -9,7 +9,7 @@ export interface AuthUser {
   lastName?: string;
 }
 
-type ThemeId = 'light' | 'dark' | 'white';
+type ThemeId = 'light' | 'white';
 type LanguageId = 'fr' | 'en';
 
 interface AuthState {
@@ -26,12 +26,11 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
-  theme: 'dark',
+  theme: 'light',
   language: 'fr',
   setTheme: (theme) =>
     set(() => {
       if (typeof document !== 'undefined') {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
         document.documentElement.setAttribute('data-theme', theme);
       }
       return { theme };

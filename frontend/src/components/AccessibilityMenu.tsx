@@ -31,18 +31,15 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({ settings, 
   };
 
   const cycleTheme = () => {
-    // Cycle global : dark -> light -> white -> dark...
-    if (theme === 'dark') {
-      setTheme('light');
-    } else if (theme === 'light') {
+    // Bascule global : light <-> white
+    if (theme === 'light') {
       setTheme('white');
     } else {
-      setTheme('dark');
+      setTheme('light');
     }
   };
 
-  const themeLabel =
-    theme === 'dark' ? 'Sombre' : theme === 'light' ? 'Clair' : 'Blanc';
+  const themeLabel = theme === 'light' ? 'Clair' : 'Blanc';
 
   return (
     <nav

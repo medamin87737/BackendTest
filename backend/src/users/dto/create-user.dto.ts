@@ -10,7 +10,7 @@ import {
   IsMongoId,
   MaxLength,
 } from 'class-validator';
-import { UserStatus } from '../schemas/user.schema';
+import { UserRole, UserStatus } from '../schemas/user.schema';
 
 export class CreateUserDto {
   @IsString()
@@ -62,4 +62,10 @@ export class CreateUserDto {
   })
   @IsOptional()
   status?: UserStatus; // Statut utilisateur
+
+  @IsEnum(UserRole, {
+    message: 'Rôle invalide. Valeurs acceptées: HR, MANAGER, EMPLOYEE, ADMIN',
+  })
+  @IsOptional()
+  role?: UserRole; // Rôle applicatif
 }

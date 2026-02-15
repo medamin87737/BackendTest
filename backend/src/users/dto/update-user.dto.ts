@@ -10,7 +10,7 @@ import {
   MinLength,
   Matches,
 } from 'class-validator';
-import { UserStatus } from '../schemas/user.schema';
+import { UserRole, UserStatus } from '../schemas/user.schema';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -66,4 +66,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   en_ligne?: boolean; // Statut en ligne
+
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole; // Rôle applicatif
 }

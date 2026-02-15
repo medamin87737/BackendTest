@@ -57,9 +57,9 @@ Un **bouton rond** avec l’icône d’accessibilité ouvre un **panneau vertica
 
 - **Store global (thème + langue)**  
   - Fichier : `src/store/authStore.ts`  
-  - Types : `ThemeId = 'light' | 'dark' | 'white'`, `LanguageId = 'fr' | 'en'`  
+  - Types : `ThemeId = 'light' | 'white'`, `LanguageId = 'fr' | 'en'`  
   - Expose :
-    - `theme` / `setTheme(theme)` → gère la classe `dark` et l’attribut `data-theme` sur `<html>`
+    - `theme` / `setTheme(theme)` → gère l’attribut `data-theme` sur `<html>`
     - `language` / `setLanguage(language)` → stocke aussi le choix dans `localStorage` (`language`)
 
 - **Types d’accessibilité**  

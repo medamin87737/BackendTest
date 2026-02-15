@@ -3,6 +3,13 @@ import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
+export enum UserRole {
+  HR = 'HR',
+  MANAGER = 'MANAGER',
+  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'ADMIN',
+}
+
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
@@ -42,6 +49,9 @@ export class User {
   @Prop({ type: String, enum: UserStatus, default: UserStatus.ACTIVE, maxlength: 50 })
   status: UserStatus; // Statut utilisateur
 
+  @Prop({ type: String, enum: UserRole, default: UserRole.EMPLOYEE })
+  role: UserRole; // Rôle applicatif (HR, MANAGER, EMPLOYEE, ADMIN)
+
   @Prop({ type: Boolean, default: false })
   en_ligne: boolean; // Statut en ligne
 }
@@ -54,4 +64,5 @@ UserSchema.index({ matricule: 1 });
 UserSchema.index({ department_id: 1 });
 UserSchema.index({ manager_id: 1 });
 UserSchema.index({ status: 1 });
+UserSchema.index({ role: 1 });
 UserSchema.index({ en_ligne: 1 });

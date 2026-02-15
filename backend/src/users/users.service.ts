@@ -6,9 +6,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {isValidObjectId, Model, Types} from 'mongoose';
+import { isValidObjectId, Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { User, UserDocument, UserStatus } from './schemas/user.schema';
+import { User, UserDocument, UserRole, UserStatus } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 
@@ -66,6 +66,7 @@ export class UsersService {
         password: hashedPassword,
         date_embauche: new Date(createUserDto.date_embauche),
         status: createUserDto.status || UserStatus.ACTIVE,
+        role: createUserDto.role || UserRole.EMPLOYEE,
         en_ligne: false,
       };
 

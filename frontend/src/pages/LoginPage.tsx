@@ -201,21 +201,20 @@ export const LoginPage: React.FC = () => {
               onSubmit={async (values: LoginFormData) => {
                 const ok = await login(values);
                 if (ok) {
-  const { user } = useAuthStore.getState();
+                  const { user } = useAuthStore.getState();
 
-  if (user?.role === 'admin') {
-    navigate('/admin');
-  } else if (user?.role === 'hr') {
-    navigate('/hr');
-  } else if (user?.role === 'employee') {
-    navigate('/employee');
-  } else if (user?.role === 'manager') {
-    navigate('/manager');
-  } else {
-    navigate('/home');
-  }
-}
-
+                  if (user?.role === 'admin') {
+                    navigate('/admin');
+                  } else if (user?.role === 'hr') {
+                    navigate('/hr');
+                  } else if (user?.role === 'employee') {
+                    navigate('/employee');
+                  } else if (user?.role === 'manager') {
+                    navigate('/manager');
+                  } else {
+                    navigate('/home');
+                  }
+                }
               }}
               disabled={isLoading}
             />
@@ -227,7 +226,6 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
           </div>
-
         </motion.section>
       </div>
     </div>

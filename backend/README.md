@@ -44,7 +44,7 @@ http://localhost:3000
 
 5. Routes API (module Users)
 
-Le schéma User est aligné sur la table **User** du PDF (id, name, matricule, telephone, email, password, date_embauche, department_id, manager_id, status, en_ligne).
+Le schéma User est aligné sur la table **User** du PDF (id, name, matricule, telephone, email, password, date_embauche, department_id, manager_id, status, en_ligne) **avec un champ supplémentaire applicatif `role` (HR / MANAGER / EMPLOYEE / ADMIN)** pour la gestion des droits dans l’application.
 
 | Méthode | Route             | Accès                | Body JSON (exemple)                                                                                                                                                                                                                                   | Description                                         |
 | ------- | ----------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
@@ -75,7 +75,8 @@ Après login, tu obtiens une réponse avec le token et les informations utilisat
     "date_embauche": "2023-01-15T00:00:00.000Z",
     "department_id": "65f1b2c3d4e5f6a7b8c9d0e1",
     "manager_id": "65f1b2c3d4e5f6a7b8c9d0e2",
-    "status": "ACTIVE",
+  "status": "ACTIVE",
+  "role": "HR",
     "en_ligne": true,
     "createdAt": "2023-01-15T10:00:00.000Z",
     "updatedAt": "2023-01-15T10:00:00.000Z"
@@ -114,7 +115,8 @@ Body : JSON
   "date_embauche": "2023-01-15",
   "department_id": "65f1b2c3d4e5f6a7b8c9d0e1",
   "manager_id": "65f1b2c3d4e5f6a7b8c9d0e2",
-  "status": "ACTIVE"
+  "status": "ACTIVE",
+  "role": "EMPLOYEE"
 }
 
 
