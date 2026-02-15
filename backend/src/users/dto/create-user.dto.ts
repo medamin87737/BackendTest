@@ -10,7 +10,7 @@ import {
   IsMongoId,
   MaxLength,
 } from 'class-validator';
-import { UserRole, UserStatus } from '../schemas/user.schema';
+import { UserStatus } from '../schemas/user.schema';
 
 export class CreateUserDto {
   @IsString()
@@ -51,7 +51,7 @@ export class CreateUserDto {
 
   @IsMongoId({ message: 'L\'ID du département doit être un ObjectId valide' })
   @IsOptional()
-  departement_id?: string; // Référence au département
+  department_id?: string; // Référence au département
 
   @IsMongoId({ message: 'L\'ID du manager doit être un ObjectId valide' })
   @IsOptional()
@@ -62,14 +62,4 @@ export class CreateUserDto {
   })
   @IsOptional()
   status?: UserStatus; // Statut utilisateur
-
-  @IsEnum(UserRole, {
-    message: 'Rôle invalide. Valeurs acceptées: HR, MANAGER, EMPLOYEE, ADMIN',
-  })
-  @IsOptional()
-  role?: UserRole; // Rôle utilisateur
-
-  @IsString()
-  @IsOptional()
-  profilePicture?: string; // Photo de profil
 }

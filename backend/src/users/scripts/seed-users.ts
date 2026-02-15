@@ -4,7 +4,7 @@ import { UsersService } from '../users.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Department, DepartmentDocument } from '../schemas/department.schema';
-import { UserRole, UserStatus } from '../schemas/user.schema';
+import { UserStatus } from '../schemas/user.schema';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -42,7 +42,6 @@ async function bootstrap() {
     console.log('\n👥 Création des utilisateurs...\n');
 
     const users = [
-      // Admin
       {
         name: 'Admin Principal',
         matricule: 'ADM001',
@@ -50,11 +49,9 @@ async function bootstrap() {
         email: 'admin@example.com',
         password: 'Admin123!',
         date_embauche: '2020-01-15',
-        departement_id: createdDepartments[1]._id.toString(), // RH
+        department_id: createdDepartments[1]._id.toString(), // RH
         status: UserStatus.ACTIVE,
-        role: UserRole.ADMIN,
       },
-      // HR
       {
         name: 'Sarah Ben Ali',
         matricule: 'HR001',
@@ -62,11 +59,9 @@ async function bootstrap() {
         email: 'hr@example.com',
         password: 'Hr123456!',
         date_embauche: '2021-03-20',
-        departement_id: createdDepartments[1]._id.toString(), // RH
+        department_id: createdDepartments[1]._id.toString(), // RH
         status: UserStatus.ACTIVE,
-        role: UserRole.HR,
       },
-      // Manager
       {
         name: 'Mohamed Trabelsi',
         matricule: 'MGR001',
@@ -74,11 +69,9 @@ async function bootstrap() {
         email: 'manager@example.com',
         password: 'Manager123!',
         date_embauche: '2022-05-10',
-        departement_id: createdDepartments[0]._id.toString(), // IT
+        department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
-        role: UserRole.MANAGER,
       },
-      // Employés
       {
         name: 'Ahmed Ben Salah',
         matricule: 'EMP001',
@@ -86,10 +79,8 @@ async function bootstrap() {
         email: 'ahmed@example.com',
         password: 'Employee123!',
         date_embauche: '2023-06-01',
-        departement_id: createdDepartments[0]._id.toString(), // IT
-        manager_id: null, // Sera mis à jour après création du manager
+        department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
-        role: UserRole.EMPLOYEE,
       },
       {
         name: 'Fatma Khelifi',
@@ -98,10 +89,8 @@ async function bootstrap() {
         email: 'fatma@example.com',
         password: 'Employee123!',
         date_embauche: '2023-07-15',
-        departement_id: createdDepartments[0]._id.toString(), // IT
-        manager_id: null, // Sera mis à jour après création du manager
+        department_id: createdDepartments[0]._id.toString(), // IT
         status: UserStatus.ACTIVE,
-        role: UserRole.EMPLOYEE,
       },
       {
         name: 'Youssef Mezghani',
@@ -110,53 +99,18 @@ async function bootstrap() {
         email: 'youssef@example.com',
         password: 'Employee123!',
         date_embauche: '2023-08-20',
-        departement_id: createdDepartments[2]._id.toString(), // Finance
+        department_id: createdDepartments[2]._id.toString(), // Finance
         status: UserStatus.ACTIVE,
-        role: UserRole.EMPLOYEE,
       },
     ];
 
     const createdUsers: any[] = [];
-    let managerId: string | null = null;
 
-    // Créer d'abord le manager
-    const managerData = users.find(u => u.role === UserRole.MANAGER);
-    if (managerData) {
-      try {
-        const result = await usersService.create(managerData);
-        managerId = result.user._id.toString();
-        createdUsers.push(result.user);
-        console.log(`  ✓ ${managerData.role} créé: ${managerData.name} (${managerData.email})`);
-      } catch (error: any) {
-        if (error.message?.includes('déjà utilisé')) {
-          console.log(`  → Manager existant: ${managerData.email}`);
-          // Récupérer le manager existant
-          const existingManager = await usersService.findByEmail(managerData.email);
-          if (existingManager) {
-            managerId = existingManager._id.toString();
-          }
-        } else {
-          console.error(`  ✗ Erreur pour ${managerData.email}: ${error.message}`);
-        }
-      }
-    }
-
-    // Créer les autres utilisateurs
     for (const userData of users) {
-      // Skip le manager car déjà créé
-      if (userData.role === UserRole.MANAGER) continue;
-
       try {
-        // Pour les employés IT, on assigne le manager
-        if (userData.role === UserRole.EMPLOYEE && 
-            userData.departement_id === createdDepartments[0]._id.toString() && 
-            managerId) {
-          userData.manager_id = managerId;
-        }
-        
         const result = await usersService.create(userData);
         createdUsers.push(result.user);
-        console.log(`  ✓ ${userData.role} créé: ${userData.name} (${userData.email})`);
+        console.log(`  ✓ Utilisateur créé: ${userData.name} (${userData.email})`);
       } catch (error: any) {
         if (error.message?.includes('déjà utilisé')) {
           console.log(`  → Utilisateur existant: ${userData.email}`);
@@ -170,7 +124,7 @@ async function bootstrap() {
     console.log('\n📋 Résumé des utilisateurs créés:');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     createdUsers.forEach((user) => {
-      console.log(`  • ${user.name} (${user.role}) - ${user.email}`);
+      console.log(`  • ${user.name} - ${user.email}`);
       console.log(`    Matricule: ${user.matricule} | Tél: ${user.telephone}`);
     });
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');

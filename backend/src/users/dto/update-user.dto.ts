@@ -10,7 +10,7 @@ import {
   MinLength,
   Matches,
 } from 'class-validator';
-import { UserRole, UserStatus } from '../schemas/user.schema';
+import { UserStatus } from '../schemas/user.schema';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -51,7 +51,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsMongoId({ message: 'L\'ID du département doit être un ObjectId valide' })
-  departement_id?: string; // Référence au département
+  department_id?: string; // Référence au département
 
   @IsOptional()
   @IsMongoId({ message: 'L\'ID du manager doit être un ObjectId valide' })
@@ -66,12 +66,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   en_ligne?: boolean; // Statut en ligne
-
-  @IsOptional()
-  @IsEnum(UserRole)
-  role?: UserRole; // Rôle utilisateur
-
-  @IsOptional()
-  @IsString()
-  profilePicture?: string; // Photo de profil
 }

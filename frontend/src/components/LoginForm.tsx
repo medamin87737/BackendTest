@@ -114,7 +114,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, disabled }) => {
         )}
       </div>
 
-      {/* Remember me + langue (i18n prêt) */}
+      {/* Remember me */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <label className="inline-flex items-center gap-2 text-sm text-gray-200 cursor-pointer">
           <input
@@ -125,20 +125,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, disabled }) => {
           />
           <span>Se souvenir de moi</span>
         </label>
-
-        {/* Placeholder pour futur sélecteur de langue (i18n) */}
-        <div className="flex items-center gap-2 text-sm text-gray-200">
-          <span className="sr-only">Langue de l’interface</span>
-          <select
-            className="bg-white/5 border border-white/20 rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-primary-400"
-            aria-label="Sélectionner la langue"
-            defaultValue="fr"
-            disabled={isFormDisabled}
-          >
-            <option value="fr">Français</option>
-            <option value="en">English</option>
-          </select>
-        </div>
       </div>
 
       <button

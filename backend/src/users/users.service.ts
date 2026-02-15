@@ -67,16 +67,14 @@ export class UsersService {
         date_embauche: new Date(createUserDto.date_embauche),
         status: createUserDto.status || UserStatus.ACTIVE,
         en_ligne: false,
-        role: createUserDto.role,
-        profilePicture: createUserDto.profilePicture,
       };
 
-      // Convertir departement_id en ObjectId si fourni
-      if (createUserDto.departement_id) {
-        if (!isValidObjectId(createUserDto.departement_id)) {
+      // Convertir department_id en ObjectId si fourni
+      if (createUserDto.department_id) {
+        if (!isValidObjectId(createUserDto.department_id)) {
           throw new BadRequestException('ID du département invalide');
         }
-        userData.departement_id = new Types.ObjectId(createUserDto.departement_id);
+        userData.department_id = new Types.ObjectId(createUserDto.department_id);
       }
 
       // Convertir manager_id en ObjectId si fourni
@@ -134,8 +132,7 @@ export class UsersService {
         throw new UnauthorizedException('Email ou mot de passe incorrect');
       }
 
-      // Mettre à jour la date de dernière connexion et le statut en ligne
-      user.lastLogin = new Date();
+      // Mettre à jour le statut en ligne
       user.en_ligne = true;
       await user.save();
 
@@ -208,12 +205,12 @@ export class UsersService {
       updateData.date_embauche = new Date(dto.date_embauche);
     }
 
-    // Convertir departement_id en ObjectId si fourni
-    if (dto.departement_id) {
-      if (!isValidObjectId(dto.departement_id)) {
+    // Convertir department_id en ObjectId si fourni
+    if (dto.department_id) {
+      if (!isValidObjectId(dto.department_id)) {
         throw new BadRequestException('ID du département invalide');
       }
-      updateData.departement_id = new Types.ObjectId(dto.departement_id);
+      updateData.department_id = new Types.ObjectId(dto.department_id);
     }
 
     // Convertir manager_id en ObjectId si fourni

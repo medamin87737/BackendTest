@@ -3,13 +3,6 @@ import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-export enum UserRole {
-  HR = 'HR',
-  MANAGER = 'MANAGER',
-  EMPLOYEE = 'EMPLOYEE',
-  ADMIN = 'ADMIN',
-}
-
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
@@ -41,7 +34,7 @@ export class User {
   date_embauche: Date; // Date d'embauche
 
   @Prop({ type: Types.ObjectId, ref: 'Department', required: false })
-  departement_id?: Types.ObjectId; // Référence au département
+  department_id?: Types.ObjectId; // Référence au département
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: false })
   manager_id?: Types.ObjectId; // Référence au manager (self-reference)
@@ -51,16 +44,6 @@ export class User {
 
   @Prop({ type: Boolean, default: false })
   en_ligne: boolean; // Statut en ligne
-
-  // Champs supplémentaires pour compatibilité avec l'ancien système
-  @Prop({ type: String, enum: UserRole, default: UserRole.EMPLOYEE })
-  role?: UserRole; // Rôle utilisateur (HR, MANAGER, EMPLOYEE, ADMIN)
-
-  @Prop({ type: Date })
-  lastLogin?: Date; // Dernière connexion
-
-  @Prop()
-  profilePicture?: string; // Photo de profil
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -68,8 +51,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
 // Index pour améliorer les performances de recherche
 UserSchema.index({ email: 1 });
 UserSchema.index({ matricule: 1 });
-UserSchema.index({ role: 1 });
-UserSchema.index({ departement_id: 1 });
+UserSchema.index({ department_id: 1 });
 UserSchema.index({ manager_id: 1 });
 UserSchema.index({ status: 1 });
 UserSchema.index({ en_ligne: 1 });

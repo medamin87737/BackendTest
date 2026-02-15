@@ -88,15 +88,8 @@ export const LoginPage: React.FC = () => {
         onSettingsChange={setAccessibility}
       />
 
-      {/* Bandeau de marque */}
-      <header className="relative z-10 flex items-center justify-between px-4 pt-4 lg:px-8 lg:pt-6">
-        <div className="inline-flex items-center gap-2 rounded-full bg-black/30 px-3 py-1 backdrop-blur border border-white/10">
-          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
-          <span className="text-xs uppercase tracking-wide text-gray-200">
-            SkillUpTN
-          </span>
-        </div>
-      </header>
+      {/* Bandeau de marque (réservé si besoin futur, vide pour l'instant) */}
+      <header className="relative z-10 px-4 pt-4 lg:px-8 lg:pt-6" />
 
       {/* Contenu principal */}
       <div
