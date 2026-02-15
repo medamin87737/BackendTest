@@ -85,4 +85,14 @@ export class UsersController {
   async remove(@Param('id') id: string) {
     return this.usersService.deleteById(id);
   }
+
+  /** Mettre à jour le statut en ligne - Authentifié */
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/online-status')
+  async updateOnlineStatus(
+    @Param('id') id: string,
+    @Body('en_ligne') en_ligne: boolean,
+  ) {
+    return this.usersService.updateOnlineStatus(id, en_ligne);
+  }
 }

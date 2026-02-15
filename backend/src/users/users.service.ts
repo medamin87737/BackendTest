@@ -6,9 +6,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {isValidObjectId, Model} from 'mongoose';
+import {isValidObjectId, Model, Types} from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument, UserStatus } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 
@@ -22,12 +22,32 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<any> {
     try {
       // Vérifier si l'email existe déjà
-      const existingUser = await this.userModel.findOne({
+      const existingUserByEmail = await this.userModel.findOne({
         email: createUserDto.email.toLowerCase(),
       });
 
-      if (existingUser) {
+      if (existingUserByEmail) {
         throw new ConflictException('Cet email est déjà utilisé');
+      }
+
+      // Vérifier si le matricule existe déjà
+      const existingUserByMatricule = await this.userModel.findOne({
+        matricule: createUserDto.matricule,
+      });
+
+      if (existingUserByMatricule) {
+        throw new ConflictException('Ce matricule est déjà utilisé');
+      }
+
+      // Vérifier que le manager existe si manager_id est fourni
+      if (createUserDto.manager_id) {
+        if (!isValidObjectId(createUserDto.manager_id)) {
+          throw new BadRequestException('ID du manager invalide');
+        }
+        const manager = await this.userModel.findById(createUserDto.manager_id);
+        if (!manager) {
+          throw new NotFoundException('Manager non trouvé');
+        }
       }
 
       // Hasher le mot de passe
@@ -37,13 +57,35 @@ export class UsersService {
         saltRounds,
       );
 
-      // Créer l'utilisateur
-      const newUser = new this.userModel({
-        ...createUserDto,
+      // Préparer les données utilisateur
+      const userData: any = {
+        name: createUserDto.name,
+        matricule: createUserDto.matricule,
+        telephone: createUserDto.telephone,
         email: createUserDto.email.toLowerCase(),
         password: hashedPassword,
-      });
+        date_embauche: new Date(createUserDto.date_embauche),
+        status: createUserDto.status || UserStatus.ACTIVE,
+        en_ligne: false,
+        role: createUserDto.role,
+        profilePicture: createUserDto.profilePicture,
+      };
 
+      // Convertir departement_id en ObjectId si fourni
+      if (createUserDto.departement_id) {
+        if (!isValidObjectId(createUserDto.departement_id)) {
+          throw new BadRequestException('ID du département invalide');
+        }
+        userData.departement_id = new Types.ObjectId(createUserDto.departement_id);
+      }
+
+      // Convertir manager_id en ObjectId si fourni
+      if (createUserDto.manager_id) {
+        userData.manager_id = new Types.ObjectId(createUserDto.manager_id);
+      }
+
+      // Créer l'utilisateur
+      const newUser = new this.userModel(userData);
       const savedUser = await newUser.save();
 
       // Retourner sans le mot de passe
@@ -52,7 +94,7 @@ export class UsersService {
         user: this.sanitizeUser(savedUser),
       };
     } catch (error) {
-      if (error instanceof ConflictException) {
+      if (error instanceof ConflictException || error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
       throw new BadRequestException(
@@ -75,10 +117,10 @@ export class UsersService {
         throw new UnauthorizedException('Email ou mot de passe incorrect');
       }
 
-      // Vérifier si le compte est actif
-      if (!user.isActive) {
+      // Vérifier si le compte est actif (utiliser status au lieu de isActive)
+      if (user.status !== UserStatus.ACTIVE) {
         throw new UnauthorizedException(
-          "Votre compte est désactivé. Contactez l'administrateur",
+          "Votre compte n'est pas actif. Contactez l'administrateur",
         );
       }
 
@@ -92,8 +134,9 @@ export class UsersService {
         throw new UnauthorizedException('Email ou mot de passe incorrect');
       }
 
-      // Mettre à jour la date de dernière connexion
+      // Mettre à jour la date de dernière connexion et le statut en ligne
       user.lastLogin = new Date();
+      user.en_ligne = true;
       await user.save();
 
       // Retourner les informations utilisateur
@@ -157,9 +200,44 @@ export class UsersService {
       throw new BadRequestException('ID invalide');
     }
 
+    // Préparer les données de mise à jour
+    const updateData: any = { ...dto };
+
+    // Convertir date_embauche en Date si fourni
+    if (dto.date_embauche) {
+      updateData.date_embauche = new Date(dto.date_embauche);
+    }
+
+    // Convertir departement_id en ObjectId si fourni
+    if (dto.departement_id) {
+      if (!isValidObjectId(dto.departement_id)) {
+        throw new BadRequestException('ID du département invalide');
+      }
+      updateData.departement_id = new Types.ObjectId(dto.departement_id);
+    }
+
+    // Convertir manager_id en ObjectId si fourni
+    if (dto.manager_id) {
+      if (!isValidObjectId(dto.manager_id)) {
+        throw new BadRequestException('ID du manager invalide');
+      }
+      // Vérifier que le manager existe
+      const manager = await this.userModel.findById(dto.manager_id);
+      if (!manager) {
+        throw new NotFoundException('Manager non trouvé');
+      }
+      updateData.manager_id = new Types.ObjectId(dto.manager_id);
+    }
+
+    // Hasher le mot de passe si fourni
+    if (dto.password) {
+      const saltRounds = 10;
+      updateData.password = await bcrypt.hash(dto.password, saltRounds);
+    }
+
     const updated = await this.userModel.findByIdAndUpdate(
         id,
-        dto,
+        updateData,
         { new: true }
     );
 
@@ -189,6 +267,28 @@ export class UsersService {
     };
   }
 
+  /**
+   * Mettre à jour le statut en ligne d'un utilisateur
+   */
+  async updateOnlineStatus(id: string, isOnline: boolean): Promise<any> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('ID invalide');
+    }
 
+    const updated = await this.userModel.findByIdAndUpdate(
+      id,
+      { en_ligne: isOnline },
+      { new: true }
+    );
+
+    if (!updated) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return {
+      message: `Statut en ligne mis à jour: ${isOnline ? 'en ligne' : 'hors ligne'}`,
+      user: this.sanitizeUser(updated),
+    };
+  }
 
 }
